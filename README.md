@@ -34,7 +34,28 @@ Format error: `{"error": "pesan singkat"}` (400 untuk data tidak valid, 404 jika
 
 ## Arsitektur
 
-<!-- Tambahkan diagram arsitektur di sini -->
+
+## AWS Architecture Diagram
+
+Diagram berikut menggambarkan arsitektur deployment aplikasi Flask menggunakan AWS EC2 dan RDS MySQL.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'background':'transparent','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','secondaryColor':'#ffffff','tertiaryColor':'#ffffff','clusterBkg':'transparent','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','fontFamily':'Arial'}}}%%
+flowchart LR
+  U["Client<br/>curl / Postman"] -->|"HTTP :5000"| EC2
+  subgraph AWS["AWS Cloud - us-east-1 (Default VPC)"]
+    EC2["EC2 t3.micro<br/>Flask app"]
+    RDS[("RDS MySQL<br/>db: inventory")]
+    SGW["SG inv-sg-web<br/>22, 5000 dari IP sendiri"]
+    SGD["SG inv-sg-db<br/>3306 dari inv-sg-web saja<br/>Public access: No"]
+    EC2 -->|"MySQL :3306"| RDS
+    SGW -.- EC2
+    SGD -.- RDS
+  end
+  classDef sec stroke-dasharray:5 3
+  class SGW,SGD sec
+```
+
 
 **Ringkasan alur dan keamanan**
 
