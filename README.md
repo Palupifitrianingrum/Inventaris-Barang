@@ -41,55 +41,74 @@ Format error: `{"error": "pesan singkat"}` (400 untuk data tidak valid, 404 jika
 
 Diagram berikut menggambarkan arsitektur deployment aplikasi Flask menggunakan AWS EC2 dan RDS MySQL.
 
+
 #### Track A: EC2 + RDS MySQL
-%%{init: {'theme':'base','themeVariables':{'background':'transparent','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','secondaryColor':'#ffffff','tertiaryColor':'#ffffff','clusterBkg':'transparent','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','fontFamily':'Arial'}}}%%
+
+```mermaid
 flowchart LR
   U["Client<br/>curl / Postman"] -->|"HTTP :5000"| EC2
+
   subgraph AWS["AWS Cloud - us-east-1 (Default VPC)"]
     EC2["EC2 t3.micro<br/>Flask app"]
     RDS[("RDS MySQL<br/>db: inventory")]
     SGW["SG inv-sg-web<br/>22, 5000 dari IP sendiri"]
     SGD["SG inv-sg-db<br/>3306 dari inv-sg-web saja<br/>Public access: No"]
+
     EC2 -->|"MySQL :3306"| RDS
     SGW -.- EC2
     SGD -.- RDS
   end
+
   classDef sec stroke-dasharray:5 3
   class SGW,SGD sec
+```
 
 #### Track B: EC2 + Docker + ECR
+
+```mermaid
 %%{init: {'theme':'base','themeVariables':{'background':'transparent','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','secondaryColor':'#ffffff','tertiaryColor':'#ffffff','clusterBkg':'transparent','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','fontFamily':'Arial'}}}%%
 flowchart LR
   DEV["Developer"] -->|"docker build + push"| ECR
   U["Client<br/>curl / Postman"] -->|"HTTP :5000"| API
+
   subgraph AWS["AWS Cloud - us-east-1"]
     ECR[("ECR<br/>inventory-api")]
+
     subgraph EC2["EC2 t3.micro + Docker Compose"]
       API["api (Flask)"] -->|"MySQL :3306"| DB[("db (MySQL 8.0)")]
     end
+
     ECR -->|"docker pull"| EC2
     SGB["SG inv-sg-ec2-b<br/>22, 5000 dari IP sendiri<br/>3306 tidak dibuka"]
     IAM["IAM LabRole<br/>ecr push / pull"]
     SGB -.- EC2
     IAM -.- ECR
   end
+
   classDef sec stroke-dasharray:5 3
   class SGB,IAM sec
+```
 
 #### Track C: API Gateway + Lambda + DynamoDB
 
+```mermaid
 %%{init: {'theme':'base','themeVariables':{'background':'transparent','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','secondaryColor':'#ffffff','tertiaryColor':'#ffffff','clusterBkg':'transparent','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','fontFamily':'Arial'}}}%%
 flowchart LR
   U["Client<br/>curl / Postman"] -->|"HTTPS"| GW
+
   subgraph AWS["AWS Cloud - us-east-1"]
     GW["API Gateway (HTTP API)<br/>POST/GET /items<br/>PUT/DELETE /items/{id}"] -->|"invoke"| L["Lambda<br/>inventory-api<br/>Python 3.12"]
+
     L -->|"IAM LabRole"| DDB[("DynamoDB<br/>table: items<br/>PK: id")]
     L -.->|"logs"| CW["CloudWatch Logs"]
+
     ROLE["IAM role: LabRole<br/>Get/Put/Update/Delete/Scan"]
     ROLE -.- L
   end
+
   classDef sec stroke-dasharray:5 3
   class ROLE sec
+```
 
 **Ringkasan alur dan keamanan**
 
