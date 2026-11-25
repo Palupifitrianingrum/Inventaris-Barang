@@ -1,0 +1,4 @@
+{
+  "routeKey": "DELETE /items/{id}",
+  "pathParameters": { "id": "GANTI-DENGAN-ID-ITEM" }
+}

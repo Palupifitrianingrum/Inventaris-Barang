@@ -1,0 +1,4 @@
+{
+  "routeKey": "POST /items",
+  "body": "{\"name\":\"Laptop\",\"quantity\":3,\"location\":\"Rak A\"}"
+}

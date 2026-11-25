@@ -1,0 +1,5 @@
+{
+  "routeKey": "PUT /items/{id}",
+  "pathParameters": { "id": "GANTI-DENGAN-ID-ITEM" },
+  "body": "{\"name\":\"Laptop\",\"quantity\":5,\"location\":\"Rak B\"}"
+}
