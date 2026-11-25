@@ -48,5 +48,5 @@ Format error: `{"error": "pesan singkat"}` (400 untuk data tidak valid, 404 jika
   - Alur: Client -> API Gateway (HTTPS) -> Lambda -> DynamoDB
   - Keamanan: Lambda memakai IAM role `LabRole` -> akses DynamoDB lewat role -> tidak ada kredensial di kode
 
-## Nama = Palupi Fitria Ningrum
-## NIM = 24/540125/TK/59904
+#### Nama = Palupi Fitria Ningrum
+#### NIM = 24/540125/TK/59904
