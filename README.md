@@ -119,8 +119,8 @@ flowchart LR
   - Alur: Developer -> build image -> ECR -> EC2 (docker pull) -> container `api` -> container `db`
   - Keamanan: SG hanya membuka port 22 dan 5000 dari IP sendiri -> port database tidak dibuka ke luar, hanya di jaringan Docker
 - **Track C**
-  - Alur: Client -> API Gateway (HTTPS) -> Lambda -> DynamoDB
-  - Keamanan: Lambda memakai IAM role `LabRole` -> akses DynamoDB lewat role -> tidak ada kredensial di kode
+  - Alur: Client -> API Gateway (HTTPS) -> Lambda -> S3
+  - Keamanan: Lambda memakai IAM role `LabRole` -> akses S3 lewat role -> tidak ada kredensial di kode
 
-#### Nama = Palupi Fitria Ningrum
-#### NIM = 24/540125/TK/59904
+Nama = Palupi Fitria Ningrum </br>
+NIM = 24/540125/TK/59904
