@@ -89,7 +89,7 @@ flowchart LR
   class SGB,IAM sec
 ```
 
-#### Track C: API Gateway + Lambda + DynamoDB
+#### Track C: API Gateway + Lambda + S3
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'background':'transparent','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','secondaryColor':'#ffffff','tertiaryColor':'#ffffff','clusterBkg':'transparent','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','fontFamily':'Arial'}}}%%
