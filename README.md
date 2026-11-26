@@ -89,20 +89,20 @@ flowchart LR
   class SGB,IAM sec
 ```
 
-#### Track C: API Gateway + Lambda + DynamoDB
+#### Track C: API Gateway + Lambda + S3
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'background':'transparent','primaryColor':'#ffffff','primaryTextColor':'#000000','primaryBorderColor':'#000000','lineColor':'#000000','secondaryColor':'#ffffff','tertiaryColor':'#ffffff','clusterBkg':'transparent','clusterBorder':'#000000','edgeLabelBackground':'#ffffff','fontFamily':'Arial'}}}%%
 flowchart LR
-  U["Client<br/>curl / Postman"] -->|"HTTPS"| GW
+  U["Client<br/>curl / Postman"] -->|"HTTPS"| FU
 
   subgraph AWS["AWS Cloud - us-east-1"]
-    GW["API Gateway (HTTP API)<br/>POST/GET /items<br/>PUT/DELETE /items/{id}"] -->|"invoke"| L["Lambda<br/>inventory-api<br/>Python 3.12"]
+    FU["Lambda Function URL<br/>auth: NONE<br/>POST/GET /items<br/>PUT/DELETE /items/{id}<br/>GET /health"] -->|"invoke"| L["Lambda<br/>inventory-api<br/>Python 3.15"]
 
-    L -->|"IAM LabRole"| DDB[("DynamoDB<br/>table: items<br/>PK: id")]
+    L -->|"IAM LabRole<br/>GetObject / PutObject<br/>DeleteObject / ListBucket"| S3[("S3 bucket<br/>inv-items-540125<br/>items/id.json")]
     L -.->|"logs"| CW["CloudWatch Logs"]
 
-    ROLE["IAM role: LabRole<br/>Get/Put/Update/Delete/Scan"]
+    ROLE["IAM role: LabRole"]
     ROLE -.- L
   end
 
@@ -119,8 +119,8 @@ flowchart LR
   - Alur: Developer -> build image -> ECR -> EC2 (docker pull) -> container `api` -> container `db`
   - Keamanan: SG hanya membuka port 22 dan 5000 dari IP sendiri -> port database tidak dibuka ke luar, hanya di jaringan Docker
 - **Track C**
-  - Alur: Client -> API Gateway (HTTPS) -> Lambda -> DynamoDB
-  - Keamanan: Lambda memakai IAM role `LabRole` -> akses DynamoDB lewat role -> tidak ada kredensial di kode
+  - Alur: Client -> API Gateway (HTTPS) -> Lambda -> S3
+  - Keamanan: Lambda memakai IAM role `LabRole` -> akses S3 lewat role -> tidak ada kredensial di kode
 
-#### Nama = Palupi Fitria Ningrum
-#### NIM = 24/540125/TK/59904
+Nama = Palupi Fitria Ningrum </br>
+NIM = 24/540125/TK/59904
